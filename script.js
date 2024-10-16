@@ -1,13 +1,13 @@
-const users = JSON.parse(localStorage.getItem('users'))  [];
-const currentUser = JSON.parse(localStorage.getItem('currentUser'))  null;
+const users = JSON.parse(localStorage.getItem('users')) || [];
+const currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
 
 document.addEventListener('DOMContentLoaded', () => {
     if (currentUser) {
-        document.getElementById('profileInfo').innerHTML = 
+        document.getElementById('profileInfo').innerHTML = `
             <h3>${currentUser.username}</h3>
             <p>Bio: ${currentUser.bio}</p>
             <p>Pronouns: ${currentUser.pronouns}</p>
-        ;
+        `;
         loadUserPosts();
     }
 });
@@ -21,10 +21,15 @@ document.getElementById('signupForm')?.addEventListener('submit', (e) => {
     const bio = e.target[3].value;
     const pronouns = e.target[4].value;
 
-    users.push({ username, email, password, bio, pronouns, posts: [] });
-    localStorage.setItem('users', JSON.stringify(users));
-    alert('Account created! You can now log in.');
-    window.location.href = 'login.html';
+    const userExists = users.find(u => u.email === email);
+    if (userExists) {
+        alert('User already exists! Please log in.');
+    } else {
+        users.push({ username, email, password, bio, pronouns, posts: [] });
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Account created! You can now log in.');
+        window.location.href = 'login.html';
+    }
 });
 
 // Login Functionality
@@ -47,19 +52,18 @@ function loadUserPosts() {
     const userPostsContainer = document.getElementById('userPosts');
     userPostsContainer.innerHTML = '';
     currentUser.posts.forEach((post, index) => {
-        userPostsContainer.innerHTML += 
+        userPostsContainer.innerHTML += `
             <div class="post">
                 <p>${post}</p>
                 <button onclick="likePost(${index})">Like</button>
                 <span id="likeCount${index}">0</span>
             </div>
-        ;
+        `;
     });
 }
 
 // Post Functionality
-document.g
-etElementById('postForm')?.addEventListener('submit', (e) => {
+document.getElementById('postForm')?.addEventListener('submit', (e) => {
     e.preventDefault();
     const postContent = e.target[0].value;
     currentUser.posts.push(postContent);
@@ -73,4 +77,9 @@ function likePost(index) {
     const likeCountElement = document.getElementById(likeCount${index});
     let count = parseInt(likeCountElement.textContent) || 0;
     likeCountElement.textContent = count + 1;
+}
+
+// Logout Functionality
+function logout() {
+    localStorage.removeItem('currentUser');
 }
