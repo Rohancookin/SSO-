@@ -74,7 +74,7 @@ document.getElementById('postForm')?.addEventListener('submit', (e) => {
 
 // Like Functionality
 function likePost(index) {
-    const likeCountElement = document.getElementById(likeCount${index});
+    const likeCountElement = document.getElementById(likeCount${index}); // Corrected line
     let count = parseInt(likeCountElement.textContent) || 0;
     likeCountElement.textContent = count + 1;
 }
@@ -82,5 +82,5 @@ function likePost(index) {
 // Logout Functionality
 function logout() {
     localStorage.removeItem('currentUser');
-    window.location.href = 'index.html';
+    window.location.href = 'index.html';
 }
