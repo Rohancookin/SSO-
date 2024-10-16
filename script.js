@@ -82,4 +82,5 @@ function likePost(index) {
 // Logout Functionality
 function logout() {
     localStorage.removeItem('currentUser');
+    window.location.href = 'index.html';
 }
